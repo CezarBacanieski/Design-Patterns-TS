@@ -1,6 +1,6 @@
-import env from './adapters/presentations/api/config/env';
-import app from './adapters/presentations/api/config/app';
-import { MongoManager } from './dataSources/config/mongoManager';
+import env from "./adapters/presentations/api/config/env";
+import app from "./adapters/presentations/api/config/app";
+import { MongoManager } from "./dataSources/config/mongoManager";
 
 const dbConnector = MongoManager.getInstance();
 

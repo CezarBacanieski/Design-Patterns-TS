@@ -1,32 +1,37 @@
-import { AddTask } from "../../../usecases/addTask";
+import { DeleteTask } from "../../../usecases/deleteTask";
 import {
   Controller,
+  Validation,
   HttpRequest,
   HttpResponse,
-  Validation,
 } from "../../interfaces";
+
 import {
   badRequest,
-  created,
+  noContent,
   serverError,
 } from "../../presentations/api/httpResponses/httpResponses";
 
-export class AddTaskController implements Controller {
+export class DeleteTaskController implements Controller {
   constructor(
-    private readonly addTask: AddTask,
+    private readonly deleteTask: DeleteTask,
     private readonly validation: Validation
   ) {}
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const error = this.validation.validate(httpRequest.body);
+      const { id } = httpRequest.body;
+
+      const isValid = this.validation.validate({ id });
+      if (isValid) {
+        return badRequest(isValid);
+      }
+
+      const error = await this.deleteTask.delete({ id });
       if (error) {
         return badRequest(error);
       }
 
-      const { title, description, date } = httpRequest.body;
-
-      const task = await this.addTask.add({ title, description, date });
-      return created(task);
+      return noContent();
     } catch (error: any) {
       return serverError(error);
     }

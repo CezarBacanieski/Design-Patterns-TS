@@ -1,5 +1,5 @@
-import { Request, Response } from 'express'; 
-import { Controller } from './interfaces/controller';
+import { Request, Response } from "express";
+import { Controller } from "./interfaces/controller";
 
 export const expressRouteAdapter = (controller: Controller) => {
   return async (req: Request, res: Response) => {
@@ -8,7 +8,7 @@ export const expressRouteAdapter = (controller: Controller) => {
     };
     const httpResponse = await controller.handle(httpRequest);
 
-    if (httpResponse.statusCode === 201) {
+    if (httpResponse.statusCode === 204 || httpResponse.statusCode == 201) {
       res.status(httpResponse.statusCode).json(httpResponse.body);
     } else {
       res
